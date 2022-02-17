@@ -9,15 +9,31 @@ class Workouts extends StatefulWidget {
 }
 
 class _WorkoutsState extends State<Workouts> with TickerProviderStateMixin {
-  List images = [
-    "mountain4.jpeg",
-    "mountain8.jpeg",
-    "mountain9.jpeg",
+  List weeks = [
+    "WEEK 1",
+    "WEEK 2",
+    "WEEK 3",
   ];
+
+  List<Widget> myTabs = [];
+  List<Widget> myTabsContent = [];
+
+  late TabController myTabController;
+
+  @override
+  void initState() {
+    super.initState();
+    for (var i = 0; i < weeks.length; i++) {
+      myTabs.add(Text(weeks[i]));
+      myTabsContent.add(Text(weeks[i]));
+    }
+    var lastIndex = myTabs.length - 1;
+    myTabController = TabController(
+        vsync: this, length: myTabs.length, initialIndex: lastIndex);
+  }
+
   @override
   Widget build(BuildContext context) {
-    TabController _tabController = TabController(length: 3, vsync: this);
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -51,35 +67,22 @@ class _WorkoutsState extends State<Workouts> with TickerProviderStateMixin {
           const SizedBox(
             height: 20,
           ),
-          Container(
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: TabBar(
-                  controller: _tabController,
-                  labelColor: Color.fromARGB(255, 247, 190, 2),
-                  unselectedLabelColor: Colors.grey,
-                  isScrollable: true,
-                  labelPadding: const EdgeInsets.only(left: 20, right: 20),
-                  indicatorColor: Color.fromARGB(255, 247, 190, 2),
-                  tabs: [
-                    Tab(
-                      text: "WEEK 1",
-                    ),
-                    Tab(
-                      text: "WEEK 2",
-                    ),
-                    Tab(
-                      text: "WEEK 3",
-                    ),
-                  ]),
-            ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TabBar(
+                controller: myTabController,
+                labelColor: const Color.fromARGB(255, 247, 190, 2),
+                unselectedLabelColor: Colors.grey,
+                isScrollable: true,
+                labelPadding: const EdgeInsets.only(left: 20, right: 20),
+                indicatorColor: const Color.fromARGB(255, 247, 190, 2),
+                tabs: myTabs.toList()),
           ),
-          Container(
+          SizedBox(
             width: double.maxFinite,
             height: 300,
             child: TabBarView(
-                controller: _tabController,
-                children: [Text("Week 1"), Text("Week 2"), Text("Week 3")]),
+                controller: myTabController, children: myTabsContent.toList()),
           )
         ],
       ),
